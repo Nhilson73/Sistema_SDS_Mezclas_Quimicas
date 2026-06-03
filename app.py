@@ -28,7 +28,14 @@ from flask_login import (
 from clasificacion_ghs import clasificar_mezcla
 from config import Config
 from database import db
-from exportador import exportar_csv, exportar_json, exportar_pdf
+from exportador import (
+    exportar_csv,
+    exportar_docx,
+    exportar_docx_en,
+    exportar_json,
+    exportar_pdf,
+    exportar_pdf_en,
+)
 from generador_fds import generar_fds
 from models import (
     Componente,
@@ -614,6 +621,72 @@ def create_app():
         return send_file(
             BytesIO(csv_str.encode("utf-8")),
             mimetype="text/csv",
+            as_attachment=True,
+            download_name=filename,
+        )
+
+    @app.route("/fds/<int:version_id>/exportar/docx")
+    @login_required
+    def exportar_fds_docx(version_id):
+        version = FdsVersion.query.get_or_404(version_id)
+        mezcla = version.mezcla
+        secciones = json.loads(version.fds_json) if version.fds_json else {}
+        clasificacion = json.loads(version.clasificacion_ghs_json) if version.clasificacion_ghs_json else {}
+        mezcla_data = {
+            "nombre_producto": mezcla.nombre_producto,
+            "lote": mezcla.lote,
+            "fecha_creacion": mezcla.fecha_creacion,
+            "version_actual": version.version_numero,
+        }
+        docx_bytes = exportar_docx(secciones, clasificacion, mezcla_data)
+        filename = f"FDS_{mezcla.nombre_producto.replace(' ', '_')}_v{version.version_numero}.docx"
+        return send_file(
+            BytesIO(docx_bytes),
+            mimetype="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            as_attachment=True,
+            download_name=filename,
+        )
+
+    @app.route("/fds/<int:version_id>/exportar/pdf-en")
+    @login_required
+    def exportar_fds_pdf_en(version_id):
+        version = FdsVersion.query.get_or_404(version_id)
+        mezcla = version.mezcla
+        secciones = json.loads(version.fds_json) if version.fds_json else {}
+        clasificacion = json.loads(version.clasificacion_ghs_json) if version.clasificacion_ghs_json else {}
+        mezcla_data = {
+            "nombre_producto": mezcla.nombre_producto,
+            "lote": mezcla.lote,
+            "fecha_creacion": mezcla.fecha_creacion,
+            "version_actual": version.version_numero,
+        }
+        pdf_bytes = exportar_pdf_en(secciones, clasificacion, mezcla_data)
+        filename = f"SDS_{mezcla.nombre_producto.replace(' ', '_')}_v{version.version_numero}_EN.pdf"
+        return send_file(
+            BytesIO(pdf_bytes),
+            mimetype="application/pdf",
+            as_attachment=True,
+            download_name=filename,
+        )
+
+    @app.route("/fds/<int:version_id>/exportar/docx-en")
+    @login_required
+    def exportar_fds_docx_en(version_id):
+        version = FdsVersion.query.get_or_404(version_id)
+        mezcla = version.mezcla
+        secciones = json.loads(version.fds_json) if version.fds_json else {}
+        clasificacion = json.loads(version.clasificacion_ghs_json) if version.clasificacion_ghs_json else {}
+        mezcla_data = {
+            "nombre_producto": mezcla.nombre_producto,
+            "lote": mezcla.lote,
+            "fecha_creacion": mezcla.fecha_creacion,
+            "version_actual": version.version_numero,
+        }
+        docx_bytes = exportar_docx_en(secciones, clasificacion, mezcla_data)
+        filename = f"SDS_{mezcla.nombre_producto.replace(' ', '_')}_v{version.version_numero}_EN.docx"
+        return send_file(
+            BytesIO(docx_bytes),
+            mimetype="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             as_attachment=True,
             download_name=filename,
         )
