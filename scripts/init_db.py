@@ -209,12 +209,30 @@ def init_db():
             )
             asistente.set_password("asistente123")
 
+            drances = Usuario(
+                nombre="Drances Cafelium",
+                email="drances@cafelium.com",
+                rol="director",
+            )
+            drances.set_password("SDS2026*.*")
+
+            nhilson = Usuario(
+                nombre="Nhilson Cafelium",
+                email="nhilson@cafelium.com",
+                rol="director",
+            )
+            nhilson.set_password("SDS2026*.*")
+
             db.session.add(director)
             db.session.add(asistente)
+            db.session.add(drances)
+            db.session.add(nhilson)
             db.session.commit()
             print("  Usuarios creados:")
             print("    - Director: dcalidad@lab.com / director123")
             print("    - Asistente: asistente@lab.com / asistente123")
+            print("    - Director: drances@cafelium.com")
+            print("    - Director: nhilson@cafelium.com")
         else:
             print("  Ya existen usuarios. Saltando.")
 
