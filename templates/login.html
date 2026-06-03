@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Iniciar sesion - FSD 2026{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <div class="login-header">
+        <h1>Sistema FSD 2026</h1>
+        <p>Generador de Fichas de Datos de Seguridad para Mezclas Quimicas</p>
+    </div>
+    <div class="card">
+        <div class="card-header">Iniciar sesion</div>
+        <form method="POST" action="{{ url_for('login') }}">
+            <div class="form-group">
+                <label for="email">Correo electronico</label>
+                <input type="email" id="email" name="email" class="form-control" required
+                       placeholder="ejemplo@lab.com">
+            </div>
+            <div class="form-group">
+                <label for="password">Contrasena</label>
+                <input type="password" id="password" name="password" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width:100%">Ingresar</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

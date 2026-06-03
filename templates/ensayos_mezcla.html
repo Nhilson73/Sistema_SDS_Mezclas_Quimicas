@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% block title %}Ensayos de laboratorio - {{ mezcla.nombre_producto }}{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        Ensayos de laboratorio - {{ mezcla.nombre_producto }}
+        {% if mezcla.lote %}(Lote: {{ mezcla.lote }}){% endif %}
+    </div>
+
+    <p style="font-size: 0.85rem; color: #7f8c8d; margin-bottom: 1rem;">
+        Ingrese los resultados de ensayos realizados sobre la mezcla final.
+        Estos valores tienen prioridad absoluta en la FDS generada.
+    </p>
+
+    <form method="POST">
+        <h4 style="margin-bottom: 0.75rem;">Parametros comunes</h4>
+        {% for param in ['pH', 'Color', 'Viscosidad', 'Densidad'] %}
+        <div class="ensayo-row">
+            <div class="form-group">
+                <label>Parametro</label>
+                <input type="text" name="param_nombre_{{ loop.index0 }}" class="form-control"
+                       value="{{ param }}" readonly>
+            </div>
+            <div class="form-group">
+                <label>Valor</label>
+                <input type="text" name="param_valor_{{ loop.index0 }}" class="form-control"
+                       value="{{ ensayos_dict.get(param, '') }}"
+                       placeholder="Ej: {{ '6.5' if param == 'pH' else 'N/A' }}">
+            </div>
+            <div class="form-group">
+                <label>Unidad</label>
+                <input type="text" name="param_unidad_{{ loop.index0 }}" class="form-control"
+                       value="{{ unidades_dict.get(param, '') }}"
+                       placeholder="{{ '' if param == 'pH' else 'cP, g/mL, etc.' }}">
+            </div>
+            <div></div>
+        </div>
+        {% endfor %}
+
+        <h4 style="margin: 1.5rem 0 0.75rem;">Parametros adicionales</h4>
+        <div id="ensayos-adicionales">
+            {% for e in ensayos_adicionales %}
+            <div class="ensayo-row" data-extra="{{ loop.index0 }}">
+                <div class="form-group">
+                    <label>Parametro</label>
+                    <input type="text" name="extra_nombre_{{ loop.index0 }}" class="form-control"
+                           value="{{ e.nombre_parametro }}">
+                </div>
+                <div class="form-group">
+                    <label>Valor</label>
+                    <input type="text" name="extra_valor_{{ loop.index0 }}" class="form-control"
+                           value="{{ e.valor }}">
+                </div>
+                <div class="form-group">
+                    <label>Unidad</label>
+                    <input type="text" name="extra_unidad_{{ loop.index0 }}" class="form-control"
+                           value="{{ e.unidad or '' }}">
+                </div>
+                <div class="form-group">
+                    <button type="button" class="btn btn-danger btn-sm remove-extra">X</button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <input type="hidden" id="num_extras" name="num_extras"
+               value="{{ ensayos_adicionales|length }}">
+
+        <div class="btn-group" style="margin: 1rem 0;">
+            <button type="button" id="addEnsayo" class="btn btn-secondary btn-sm">+ Agregar parametro</button>
+        </div>
+
+        <div style="margin-top: 1.5rem;">
+            <button type="submit" class="btn btn-success">Guardar ensayos</button>
+            <a href="{{ url_for('ver_mezcla', mezcla_id=mezcla.id) }}" class="btn btn-secondary">Volver</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let extraIndex = {{ ensayos_adicionales|length }};
+
+document.getElementById('addEnsayo').addEventListener('click', function() {
+    const container = document.getElementById('ensayos-adicionales');
+    const row = document.createElement('div');
+    row.className = 'ensayo-row';
+    row.dataset.extra = extraIndex;
+    row.innerHTML = `
+        <div class="form-group">
+            <label>Parametro</label>
+            <input type="text" name="extra_nombre_${extraIndex}" class="form-control"
+                   placeholder="Ej: Punto de fusion">
+        </div>
+        <div class="form-group">
+            <label>Valor</label>
+            <input type="text" name="extra_valor_${extraIndex}" class="form-control">
+        </div>
+        <div class="form-group">
+            <label>Unidad</label>
+            <input type="text" name="extra_unidad_${extraIndex}" class="form-control">
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-danger btn-sm remove-extra">X</button>
+        </div>
+    `;
+    container.appendChild(row);
+    extraIndex++;
+    document.getElementById('num_extras').value = extraIndex;
+    attachRemoveListeners();
+});
+
+function attachRemoveListeners() {
+    document.querySelectorAll('.remove-extra').forEach(function(btn) {
+        btn.onclick = function() {
+            this.closest('.ensayo-row').remove();
+        };
+    });
+}
+attachRemoveListeners();
+</script>
+{% endblock %}

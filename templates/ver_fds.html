@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block title %}FDS v{{ version.version_numero }} - {{ mezcla.nombre_producto }}{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        FDS - {{ mezcla.nombre_producto }}
+        <span class="badge badge-{{ 'aprobada' if version.es_aprobada else 'borrador' }}">
+            {{ 'Aprobada' if version.es_aprobada else 'Borrador' }}
+        </span>
+        v{{ version.version_numero }}
+    </div>
+
+    <!-- Pictogramas -->
+    {% if clasificacion and clasificacion.pictogramas %}
+    <div class="pictogramas-container">
+        {% for p in clasificacion.pictogramas %}
+        <img src="{{ url_for('static', filename='pictogramas/' + p + '.svg') }}"
+             alt="{{ p }}" class="pictograma-img" title="{{ p }}">
+        {% endfor %}
+    </div>
+    {% if clasificacion.palabra_advertencia %}
+    <p style="font-weight: 700; color: var(--color-peligro); font-size: 1.1rem; margin: 0.5rem 0;">
+        {{ clasificacion.palabra_advertencia }}
+    </p>
+    {% endif %}
+    {% endif %}
+
+    <div class="btn-group" style="margin: 1rem 0;">
+        <a href="{{ url_for('exportar_fds_pdf', version_id=version.id) }}" class="btn btn-primary btn-sm">Descargar PDF</a>
+        <a href="{{ url_for('exportar_fds_json', version_id=version.id) }}" class="btn btn-secondary btn-sm">Descargar JSON</a>
+        <a href="{{ url_for('exportar_fds_csv', version_id=version.id) }}" class="btn btn-secondary btn-sm">Descargar CSV</a>
+        {% if current_user.rol == 'director' and not version.es_aprobada %}
+        <a href="{{ url_for('editar_fds', version_id=version.id) }}" class="btn btn-warning btn-sm">Editar FDS</a>
+        <form method="POST" action="{{ url_for('aprobar_fds', version_id=version.id) }}" style="display:inline;">
+            <button type="submit" class="btn btn-success btn-sm"
+                    onclick="return confirm('Aprobar esta FDS? Se guardara como version aprobada.')">
+                Aprobar
+            </button>
+        </form>
+        {% endif %}
+        <a href="{{ url_for('ver_mezcla', mezcla_id=mezcla.id) }}" class="btn btn-secondary btn-sm">Volver a mezcla</a>
+    </div>
+</div>
+
+<!-- Validacion -->
+{% if validacion %}
+<div class="card">
+    <div class="card-header">Validacion de coherencia</div>
+    {% if validacion.total_errores > 0 %}
+    <p style="color: var(--color-peligro); font-weight: 600;">
+        {{ validacion.total_errores }} error(es) encontrado(s) - No se puede aprobar
+    </p>
+    {% for e in validacion.errores %}
+    <div class="validacion-item validacion-error">
+        <strong>ERROR [{{ e.codigo_h }}] {{ e.seccion }}:</strong> {{ e.mensaje }}
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    {% if validacion.total_advertencias > 0 %}
+    <p style="color: var(--color-advertencia); font-weight: 600; margin-top: 0.5rem;">
+        {{ validacion.total_advertencias }} advertencia(s)
+    </p>
+    {% for w in validacion.advertencias %}
+    <div class="validacion-item validacion-warning">
+        <strong>AVISO [{{ w.codigo_h }}] {{ w.seccion }}:</strong> {{ w.mensaje }}
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    {% if validacion.total_errores == 0 and validacion.total_advertencias == 0 %}
+    <div class="alert alert-success">La FDS ha pasado todas las validaciones.</div>
+    {% endif %}
+</div>
+{% endif %}
+
+<!-- Secciones de la FDS -->
+{% for num in range(1, 17) %}
+{% set sec = secciones.get(num|string, {}) %}
+{% if sec %}
+<div class="fds-seccion">
+    <h3>{{ sec.titulo }}</h3>
+    <div class="fds-contenido">{{ sec.contenido }}</div>
+</div>
+{% endif %}
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,33 @@
+nombre_clase,metodo_calculo
+Explosivos,no_aditivo
+Gases inflamables,no_aditivo
+Aerosoles,no_aditivo
+Gases comburentes,no_aditivo
+Gases a presion,no_aditivo
+Liquidos inflamables,no_aditivo
+Solidos inflamables,no_aditivo
+Sustancias autorreactivas,no_aditivo
+Sustancias piroforas,no_aditivo
+Sustancias que experimentan calentamiento espontaneo,no_aditivo
+Sustancias que en contacto con el agua desprenden gases inflamables,no_aditivo
+Liquidos comburentes,no_aditivo
+Peroxidos organicos,no_aditivo
+Corrosivo para metales,no_aditivo
+Toxicidad aguda oral,aditivo
+Toxicidad aguda cutanea,aditivo
+Toxicidad aguda por inhalacion,aditivo
+Corrosion cutanea,no_aditivo
+Irritacion cutanea,aditivo_concentracion
+Sensibilizacion cutanea,no_aditivo
+Lesion ocular grave,no_aditivo
+Irritacion ocular,aditivo_concentracion
+Sensibilizacion respiratoria,no_aditivo
+Mutagenicidad en celulas germinales,no_aditivo
+Carcinogenicidad,no_aditivo
+Toxicidad para la reproduccion,no_aditivo
+Toxicidad especifica en determinados organos (exposicion unica),no_aditivo
+Toxicidad especifica en determinados organos (exposiciones repetidas),no_aditivo
+Peligro por aspiracion,no_aditivo
+Peligro acuatico agudo,aditivo_acuatico
+Peligro acuatico cronico,aditivo_acuatico
+Peligroso para la capa de ozono,no_aditivo
