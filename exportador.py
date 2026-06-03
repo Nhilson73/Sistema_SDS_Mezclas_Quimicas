@@ -1,4 +1,4 @@
-"""Exportador de FDS a PDF (WeasyPrint), JSON y CSV."""
+"""Exportador de FDS a PDF (WeasyPrint), JSON, CSV y DOCX."""
 
 import csv
 import io
@@ -7,6 +7,7 @@ import os
 from datetime import datetime, timezone
 
 from config import Config
+from traductor_fds import traducir_fds
 
 
 def exportar_json(fds_secciones, clasificacion, mezcla_data):
@@ -46,6 +47,12 @@ def exportar_csv(fds_secciones, clasificacion, mezcla_data):
 def _generar_html_fds(fds_secciones, clasificacion, mezcla_data):
     """Genera HTML completo de la FDS para renderizar a PDF."""
     nombre = mezcla_data.get("nombre_producto", "Sin nombre")
+    lang = mezcla_data.get("_lang", "es")
+    is_en = lang == "en"
+    header_title = "SAFETY DATA SHEET" if is_en else "FICHA DE DATOS DE SEGURIDAD"
+    header_label = "SAFETY DATA SHEET" if is_en else "FICHA DE DATOS DE SEGURIDAD"
+    page_label = "Page" if is_en else "Pagina"
+    page_of = "of" if is_en else "de"
     pictogramas = clasificacion.get("pictogramas", [])
     pictos_dir = os.path.join(Config.BASE_DIR, "static", "pictogramas")
 
@@ -68,22 +75,23 @@ def _generar_html_fds(fds_secciones, clasificacion, mezcla_data):
         </div>
         """
 
+    html_lang = "en" if is_en else "es"
     html = f"""<!DOCTYPE html>
-<html lang="es">
+<html lang="{html_lang}">
 <head>
     <meta charset="UTF-8">
-    <title>FDS - {nombre}</title>
+    <title>{"SDS" if is_en else "FDS"} - {nombre}</title>
     <style>
         @page {{
             size: A4;
             margin: 2cm;
             @top-center {{
-                content: "FICHA DE DATOS DE SEGURIDAD - {nombre}";
+                content: "{header_label} - {nombre}";
                 font-size: 8pt;
                 color: #666;
             }}
             @bottom-center {{
-                content: "Pagina " counter(page) " de " counter(pages);
+                content: "{page_label} " counter(page) " {page_of} " counter(pages);
                 font-size: 8pt;
                 color: #666;
             }}
@@ -138,7 +146,7 @@ def _generar_html_fds(fds_secciones, clasificacion, mezcla_data):
 </head>
 <body>
     <div class="header">
-        <h1>FICHA DE DATOS DE SEGURIDAD</h1>
+        <h1>{header_title}</h1>
         <h2>{nombre}</h2>
         <div class="pictogramas">{pictos_html}</div>
     </div>
@@ -177,3 +185,107 @@ def exportar_pdf(fds_secciones, clasificacion, mezcla_data, ruta_salida=None):
         return ruta_salida
     else:
         return HTML(string=html).write_pdf()
+
+
+def exportar_pdf_en(fds_secciones, clasificacion, mezcla_data, ruta_salida=None):
+    """Exporta la FDS en inglés (SDS) a PDF."""
+    secciones_en = traducir_fds(fds_secciones)
+    mezcla_en = dict(mezcla_data)
+    mezcla_en["_lang"] = "en"
+    return exportar_pdf(secciones_en, clasificacion, mezcla_en, ruta_salida)
+
+
+def exportar_docx(fds_secciones, clasificacion, mezcla_data):
+    """Exporta la FDS a formato DOCX (Word).
+
+    Returns:
+        bytes del archivo DOCX
+    """
+    try:
+        from docx import Document
+        from docx.shared import Pt, RGBColor
+        from docx.enum.text import WD_ALIGN_PARAGRAPH
+    except ImportError:
+        raise RuntimeError(
+            "python-docx no esta instalado. Ejecute: pip install python-docx"
+        )
+
+    doc = Document()
+
+    style = doc.styles["Normal"]
+    font = style.font
+    font.name = "Arial"
+    font.size = Pt(10)
+
+    nombre = mezcla_data.get("nombre_producto", "Sin nombre")
+    lang = mezcla_data.get("_lang", "es")
+    is_en = lang == "en"
+
+    # Header
+    header_title = "SAFETY DATA SHEET" if is_en else "FICHA DE DATOS DE SEGURIDAD"
+    heading = doc.add_heading(header_title, level=0)
+    heading.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    for run in heading.runs:
+        run.font.color.rgb = RGBColor(0xCC, 0x00, 0x00)
+
+    subtitle = doc.add_paragraph(nombre)
+    subtitle.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    subtitle.style.font.size = Pt(14)
+
+    # Pictograms line
+    pictogramas = clasificacion.get("pictogramas", [])
+    if pictogramas:
+        pictos_label = "Pictograms" if is_en else "Pictogramas"
+        p = doc.add_paragraph(f"{pictos_label}: {', '.join(pictogramas)}")
+        p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+    palabra_adv = clasificacion.get("palabra_advertencia", "")
+    if palabra_adv:
+        p = doc.add_paragraph(palabra_adv)
+        p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        for run in p.runs:
+            run.bold = True
+            run.font.color.rgb = RGBColor(0xCC, 0x00, 0x00)
+
+    doc.add_paragraph("")  # spacer
+
+    # Sections
+    for num in sorted(fds_secciones.keys(), key=lambda x: int(x)):
+        sec = fds_secciones[num]
+        titulo = sec.get("titulo", f"Section {num}" if is_en else f"Seccion {num}")
+        contenido = sec.get("contenido", "")
+
+        heading = doc.add_heading(titulo, level=2)
+        for run in heading.runs:
+            run.font.color.rgb = RGBColor(0xCC, 0x00, 0x00)
+            run.font.size = Pt(11)
+
+        for line in contenido.split("\n"):
+            if line.strip():
+                doc.add_paragraph(line)
+
+    # Footer
+    doc.add_paragraph("")
+    footer_text = (
+        "Generated by Sistema FSD 2026"
+        if is_en
+        else "Generado por Sistema FSD 2026"
+    )
+    p = doc.add_paragraph(footer_text)
+    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    for run in p.runs:
+        run.font.size = Pt(8)
+        run.font.color.rgb = RGBColor(0x99, 0x99, 0x99)
+
+    buffer = io.BytesIO()
+    doc.save(buffer)
+    buffer.seek(0)
+    return buffer.getvalue()
+
+
+def exportar_docx_en(fds_secciones, clasificacion, mezcla_data):
+    """Exporta la FDS en inglés (SDS) a DOCX."""
+    secciones_en = traducir_fds(fds_secciones)
+    mezcla_en = dict(mezcla_data)
+    mezcla_en["_lang"] = "en"
+    return exportar_docx(secciones_en, clasificacion, mezcla_en)

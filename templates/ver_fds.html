@@ -26,10 +26,19 @@
     {% endif %}
     {% endif %}
 
-    <div class="btn-group" style="margin: 1rem 0;">
-        <a href="{{ url_for('exportar_fds_pdf', version_id=version.id) }}" class="btn btn-primary btn-sm">Descargar PDF</a>
-        <a href="{{ url_for('exportar_fds_json', version_id=version.id) }}" class="btn btn-secondary btn-sm">Descargar JSON</a>
-        <a href="{{ url_for('exportar_fds_csv', version_id=version.id) }}" class="btn btn-secondary btn-sm">Descargar CSV</a>
+    <div class="btn-group" style="margin: 1rem 0; flex-wrap: wrap; gap: 0.3rem;">
+        <span style="font-weight:600; margin-right:0.5rem; align-self:center;">Español:</span>
+        <a href="{{ url_for('exportar_fds_pdf', version_id=version.id) }}" class="btn btn-primary btn-sm">PDF (ES)</a>
+        <a href="{{ url_for('exportar_fds_docx', version_id=version.id) }}" class="btn btn-primary btn-sm">DOCX (ES)</a>
+        <a href="{{ url_for('exportar_fds_json', version_id=version.id) }}" class="btn btn-secondary btn-sm">JSON</a>
+        <a href="{{ url_for('exportar_fds_csv', version_id=version.id) }}" class="btn btn-secondary btn-sm">CSV</a>
+
+        <span style="font-weight:600; margin-left:1rem; margin-right:0.5rem; align-self:center;">English:</span>
+        <a href="{{ url_for('exportar_fds_pdf_en', version_id=version.id) }}" class="btn btn-primary btn-sm">PDF (EN)</a>
+        <a href="{{ url_for('exportar_fds_docx_en', version_id=version.id) }}" class="btn btn-primary btn-sm">DOCX (EN)</a>
+    </div>
+
+    <div class="btn-group" style="margin: 0.5rem 0;">
         {% if current_user.rol == 'director' and not version.es_aprobada %}
         <a href="{{ url_for('editar_fds', version_id=version.id) }}" class="btn btn-warning btn-sm">Editar FDS</a>
         <form method="POST" action="{{ url_for('aprobar_fds', version_id=version.id) }}" style="display:inline;">
