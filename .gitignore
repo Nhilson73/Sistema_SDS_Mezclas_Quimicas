@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Entorno virtual
+venv/
+env/
+.venv/
+
+# Base de datos
+instance/
+*.db
+
+# Archivos subidos por usuarios
+uploads/
+
+# FDS generadas
+fds_generadas/
+
+# Variables de entorno
+.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db

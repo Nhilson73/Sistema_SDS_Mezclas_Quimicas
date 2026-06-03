@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+{% block title %}{{ mezcla.nombre_producto }} - FSD 2026{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        {{ mezcla.nombre_producto }}
+        <span class="badge badge-{{ mezcla.estado }}">{{ mezcla.estado }}</span>
+    </div>
+
+    <p><strong>Lote:</strong> {{ mezcla.lote or 'N/A' }}</p>
+    <p><strong>Fecha de creacion:</strong> {{ mezcla.fecha_creacion.strftime('%Y-%m-%d %H:%M') }}</p>
+    <p><strong>Version actual:</strong> {{ mezcla.version_actual }}</p>
+    {% if mezcla.aprobado_por %}
+    <p><strong>Aprobada por:</strong> {{ mezcla.aprobado_por.nombre }}
+       el {{ mezcla.fecha_aprobacion.strftime('%Y-%m-%d') if mezcla.fecha_aprobacion else 'N/A' }}</p>
+    {% endif %}
+
+    <div class="btn-group" style="margin-top: 1rem;">
+        <a href="{{ url_for('editar_mezcla', mezcla_id=mezcla.id) }}" class="btn btn-primary btn-sm">Editar mezcla</a>
+        <a href="{{ url_for('ensayos_mezcla', mezcla_id=mezcla.id) }}" class="btn btn-secondary btn-sm">Ensayos</a>
+        <a href="{{ url_for('generar_fds', mezcla_id=mezcla.id) }}" class="btn btn-success btn-sm">Generar FDS</a>
+    </div>
+</div>
+
+<!-- Componentes -->
+<div class="card">
+    <div class="card-header">Componentes ({{ mezcla.componentes|length }})</div>
+    {% if mezcla.componentes %}
+    <div class="table-responsive">
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre INCI</th>
+                    <th>CAS</th>
+                    <th>%</th>
+                    <th>c.s.p.</th>
+                    <th>SDS</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for c in mezcla.componentes %}
+                <tr>
+                    <td>{{ c.nombre_inci }}</td>
+                    <td>{{ c.numero_cas or 'N/A' }}</td>
+                    <td>{{ '%.2f'|format(c.porcentaje) if c.porcentaje else '-' }}</td>
+                    <td>{{ 'Si' if c.es_csp else 'No' }}</td>
+                    <td>
+                        {% if c.sds_subidas %}
+                            <span style="color: var(--color-exito);">Subida</span>
+                        {% else %}
+                            <span style="color: #7f8c8d;">No</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p style="color: #7f8c8d;">No hay componentes registrados.</p>
+    {% endif %}
+</div>
+
+<!-- Ensayos -->
+<div class="card">
+    <div class="card-header">Ensayos de laboratorio</div>
+    {% if mezcla.ensayos %}
+    <div class="table-responsive">
+        <table>
+            <thead>
+                <tr>
+                    <th>Parametro</th>
+                    <th>Valor</th>
+                    <th>Unidad</th>
+                    <th>Fecha</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for e in mezcla.ensayos %}
+                <tr>
+                    <td>{{ e.nombre_parametro }}</td>
+                    <td>{{ e.valor }}</td>
+                    <td>{{ e.unidad or '-' }}</td>
+                    <td>{{ e.fecha_ingreso.strftime('%Y-%m-%d') }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p style="color: #7f8c8d;">No hay ensayos registrados.
+       <a href="{{ url_for('ensayos_mezcla', mezcla_id=mezcla.id) }}">Agregar ensayos</a>
+    </p>
+    {% endif %}
+</div>
+
+<!-- Versiones de FDS -->
+<div class="card">
+    <div class="card-header">Versiones de FDS</div>
+    {% if mezcla.versiones_fds %}
+    <div class="table-responsive">
+        <table>
+            <thead>
+                <tr>
+                    <th>Version</th>
+                    <th>Tipo</th>
+                    <th>Generada por</th>
+                    <th>Fecha</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for v in mezcla.versiones_fds|sort(attribute='version_numero', reverse=True) %}
+                <tr>
+                    <td>v{{ v.version_numero }}</td>
+                    <td>
+                        {% if v.es_aprobada %}
+                        <span class="badge badge-aprobada">Aprobada</span>
+                        {% else %}
+                        <span class="badge badge-borrador">Borrador</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ v.generada_por.nombre }}</td>
+                    <td>{{ v.fecha_generacion.strftime('%Y-%m-%d %H:%M') }}</td>
+                    <td>
+                        <a href="{{ url_for('ver_fds', version_id=v.id) }}" class="btn btn-sm btn-primary">Ver</a>
+                        <a href="{{ url_for('exportar_fds_pdf', version_id=v.id) }}" class="btn btn-sm btn-secondary">PDF</a>
+                        <a href="{{ url_for('exportar_fds_json', version_id=v.id) }}" class="btn btn-sm btn-secondary">JSON</a>
+                        <a href="{{ url_for('exportar_fds_csv', version_id=v.id) }}" class="btn btn-sm btn-secondary">CSV</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p style="color: #7f8c8d;">No se han generado FDS aun.</p>
+    {% endif %}
+</div>
+{% endblock %}

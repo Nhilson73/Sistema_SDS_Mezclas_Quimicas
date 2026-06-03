@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - FSD 2026{% endblock %}
+
+{% block content %}
+<h1 style="margin-bottom: 1.5rem;">Dashboard</h1>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-number">{{ total_mezclas }}</div>
+        <div class="stat-label">Total mezclas</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number">{{ borradores }}</div>
+        <div class="stat-label">Borradores</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number">{{ aprobadas }}</div>
+        <div class="stat-label">Aprobadas</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number">{{ total_fds }}</div>
+        <div class="stat-label">FDS generadas</div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">Acciones rapidas</div>
+    <div class="btn-group">
+        <a href="{{ url_for('nueva_mezcla') }}" class="btn btn-primary">Nueva mezcla</a>
+        <a href="{{ url_for('lista_mezclas') }}" class="btn btn-secondary">Ver todas las mezclas</a>
+    </div>
+</div>
+
+{% if mezclas_recientes %}
+<div class="card">
+    <div class="card-header">Mezclas recientes</div>
+    <div class="table-responsive">
+        <table>
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Lote</th>
+                    <th>Estado</th>
+                    <th>Fecha</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for m in mezclas_recientes %}
+                <tr>
+                    <td>{{ m.nombre_producto }}</td>
+                    <td>{{ m.lote or 'N/A' }}</td>
+                    <td><span class="badge badge-{{ m.estado }}">{{ m.estado }}</span></td>
+                    <td>{{ m.fecha_creacion.strftime('%Y-%m-%d') }}</td>
+                    <td>
+                        <a href="{{ url_for('ver_mezcla', mezcla_id=m.id) }}" class="btn btn-sm btn-primary">Ver</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

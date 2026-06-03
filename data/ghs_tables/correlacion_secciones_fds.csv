@@ -1,0 +1,52 @@
+codigo_h,seccion_fds,regla_coherencia,mensaje_error,nivel
+H200,Seccion 7,evitar fuentes de ignicion,La Seccion 7 debe indicar medidas contra ignicion para explosivos.,error
+H200,Seccion 10,explosivo,La Seccion 10 debe mencionar la naturaleza explosiva.,error
+H220,Seccion 7,eliminar fuentes de ignicion,La Seccion 7 debe indicar eliminacion de fuentes de ignicion para gas inflamable.,error
+H220,Seccion 10,inflamable,La Seccion 10 debe mencionar la inflamabilidad del gas.,warning
+H224,Seccion 7,eliminar fuentes de ignicion,La Seccion 7 debe indicar eliminacion de fuentes de ignicion.,error
+H224,Seccion 10,inflamable,La Seccion 10 debe mencionar condiciones de inflamabilidad.,warning
+H225,Seccion 7,eliminar fuentes de ignicion,La Seccion 7 debe indicar eliminacion de fuentes de ignicion.,error
+H225,Seccion 10,inflamable,La Seccion 10 debe mencionar la inflamabilidad.,warning
+H226,Seccion 7,fuentes de ignicion,La Seccion 7 debe advertir sobre fuentes de ignicion.,warning
+H228,Seccion 7,fuentes de ignicion,La Seccion 7 debe advertir sobre fuentes de ignicion para solidos inflamables.,error
+H240,Seccion 10,calentamiento,La Seccion 10 debe advertir sobre el riesgo de explosion por calentamiento.,error
+H241,Seccion 10,calentamiento,La Seccion 10 debe advertir sobre incendio/explosion por calentamiento.,error
+H260,Seccion 7,agua,La Seccion 7 debe advertir evitar contacto con agua.,error
+H270,Seccion 7,materiales combustibles,La Seccion 7 debe advertir mantener alejado de materiales combustibles.,error
+H280,Seccion 7,temperatura,La Seccion 7 debe indicar proteger de la luz solar y no exponer a temperaturas elevadas.,warning
+H281,Seccion 7,criogenico,La Seccion 7 debe advertir sobre riesgos criogenicos.,warning
+H290,Seccion 10,corrosivo para metales,La Seccion 10 debe mencionar la corrosividad para metales.,warning
+H300,Seccion 4,centro de informacion toxicologica,La Seccion 4 debe indicar llamar a un centro de informacion toxicologica.,error
+H300,Seccion 8,proteccion respiratoria,La Seccion 8 debe recomendar proteccion respiratoria.,error
+H301,Seccion 4,centro de informacion toxicologica,La Seccion 4 debe indicar contactar centro toxicologico.,error
+H302,Seccion 4,medico,La Seccion 4 debe indicar consultar a un medico si hay malestar.,warning
+H304,Seccion 4,NO provocar el vomito,La Seccion 4 debe advertir contra la induccion del vomito en caso de aspiracion.,error
+H310,Seccion 4,quitar la ropa contaminada,La Seccion 4 debe indicar quitar la ropa contaminada.,error
+H310,Seccion 8,guantes proteccion,La Seccion 8 debe recomendar guantes de proteccion quimica.,error
+H311,Seccion 8,guantes,La Seccion 8 debe recomendar guantes de proteccion.,warning
+H314,Seccion 4,NO provocar el vomito,La Seccion 4 debe advertir contra la induccion del vomito en caso de ingestion de producto corrosivo.,error
+H314,Seccion 8,guantes resistentes a productos quimicos,La Seccion 8 debe recomendar guantes especificos para corrosivos.,warning
+H314,Seccion 4,lavar con agua,La Seccion 4 debe indicar lavar con abundante agua.,error
+H315,Seccion 4,lavar con agua,La Seccion 4 debe indicar lavar la piel con agua y jabon.,warning
+H317,Seccion 8,guantes,La Seccion 8 debe recomendar guantes para evitar contacto cutaneo.,warning
+H318,Seccion 4,lavar los ojos,La Seccion 4 debe indicar lavar los ojos con agua durante varios minutos.,error
+H318,Seccion 8,gafas,La Seccion 8 debe recomendar gafas de proteccion.,error
+H319,Seccion 4,lavar los ojos,La Seccion 4 debe indicar aclarar los ojos con agua.,warning
+H330,Seccion 4,aire fresco,La Seccion 4 debe indicar transportar al aire fresco.,error
+H330,Seccion 8,proteccion respiratoria,La Seccion 8 debe recomendar proteccion respiratoria adecuada.,error
+H331,Seccion 8,proteccion respiratoria,La Seccion 8 debe indicar proteccion respiratoria.,warning
+H334,Seccion 4,dificultad respiratoria,La Seccion 4 debe indicar medidas en caso de dificultad respiratoria.,error
+H334,Seccion 8,proteccion respiratoria,La Seccion 8 debe recomendar proteccion respiratoria contra sensibilizantes.,error
+H335,Seccion 8,ventilacion,La Seccion 8 debe recomendar ventilacion adecuada.,warning
+H340,Seccion 11,mutageno,La Seccion 11 debe mencionar datos de mutagenicidad.,error
+H350,Seccion 11,cancerigeno,La Seccion 11 debe mencionar datos de carcinogenicidad.,error
+H360,Seccion 11,reproduccion,La Seccion 11 debe mencionar datos de toxicidad reproductiva.,error
+H370,Seccion 11,organo diana,La Seccion 11 debe especificar el organo diana afectado.,error
+H371,Seccion 11,organo,La Seccion 11 debe indicar posible dano a organos.,warning
+H372,Seccion 11,exposicion repetida,La Seccion 11 debe mencionar datos de exposicion repetida.,error
+H400,Seccion 12,toxicidad aguda para organismos acuaticos,La Seccion 12 no menciona la toxicidad acuatica a pesar de H400.,error
+H400,Seccion 13,residuo peligroso,La Seccion 13 debe indicar que es un residuo peligroso para el medio acuatico.,warning
+H410,Seccion 12,muy toxico para organismos acuaticos,La Seccion 12 debe indicar la toxicidad acuatica cronica.,error
+H410,Seccion 6,contener vertido,La Seccion 6 debe indicar medidas para contener vertidos al medio acuatico.,error
+H411,Seccion 12,toxico para organismos acuaticos,La Seccion 12 debe indicar la toxicidad acuatica.,warning
+H420,Seccion 12,capa de ozono,La Seccion 12 debe mencionar el peligro para la capa de ozono.,error

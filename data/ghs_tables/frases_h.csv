@@ -1,0 +1,64 @@
+codigo_h,texto_es,clase_peligro,categoria,pictograma
+H200,Explosivo inestable,Explosivos,Inestable,GHS01
+H201,"Explosivo; peligro de explosion en masa",Explosivos,1.1,GHS01
+H202,"Explosivo; grave peligro de proyeccion",Explosivos,1.2,GHS01
+H203,"Explosivo; peligro de incendio, de onda expansiva o de proyeccion",Explosivos,1.3,GHS01
+H204,Peligro de incendio o de proyeccion,Explosivos,1.4,GHS01
+H205,Peligro de explosion en masa en caso de incendio,Explosivos,1.5,GHS01
+H220,Gas extremadamente inflamable,Gases inflamables,1,GHS02
+H221,Gas inflamable,Gases inflamables,2,GHS02
+H222,Aerosol extremadamente inflamable,Aerosoles,1,GHS02
+H223,Aerosol inflamable,Aerosoles,2,GHS02
+H224,"Liquido y vapores extremadamente inflamables",Liquidos inflamables,1,GHS02
+H225,"Liquido y vapores muy inflamables",Liquidos inflamables,2,GHS02
+H226,"Liquido y vapores inflamables",Liquidos inflamables,3,GHS02
+H228,Solido inflamable,Solidos inflamables,1,GHS02
+H240,Peligro de explosion en caso de calentamiento,Sustancias autorreactivas,A,GHS01
+H241,Peligro de incendio o explosion en caso de calentamiento,Sustancias autorreactivas,B,GHS02
+H242,Peligro de incendio en caso de calentamiento,Sustancias autorreactivas,C,GHS02
+H250,Se inflama espontaneamente en contacto con el aire,Sustancias piroforas,1,GHS02
+H251,Se calienta espontaneamente; puede inflamarse,Sustancias que experimentan calentamiento espontaneo,1,GHS02
+H252,Se calienta espontaneamente en grandes cantidades; puede inflamarse,Sustancias que experimentan calentamiento espontaneo,2,GHS02
+H260,"En contacto con el agua desprende gases inflamables que pueden inflamarse espontaneamente",Sustancias que en contacto con el agua desprenden gases inflamables,1,GHS02
+H261,En contacto con el agua desprende gases inflamables,Sustancias que en contacto con el agua desprenden gases inflamables,2,GHS02
+H270,Puede provocar o agravar un incendio; comburente,Gases comburentes,1,GHS03
+H271,Puede provocar un incendio o una explosion; muy comburente,Liquidos comburentes,1,GHS03
+H272,Puede agravar un incendio; comburente,Liquidos comburentes,2,GHS03
+H280,Contiene gas a presion; peligro de explosion en caso de calentamiento,Gases a presion,Gas comprimido,GHS04
+H281,Contiene gas refrigerado; puede provocar quemaduras o lesiones criogenicas,Gases a presion,Gas licuado refrigerado,GHS04
+H290,Puede ser corrosivo para los metales,Corrosivo para metales,1,GHS05
+H300,Mortal en caso de ingestion,Toxicidad aguda oral,1,GHS06
+H301,Toxico en caso de ingestion,Toxicidad aguda oral,3,GHS06
+H302,Nocivo en caso de ingestion,Toxicidad aguda oral,4,GHS07
+H304,Puede ser mortal en caso de ingestion y penetracion en las vias respiratorias,Peligro por aspiracion,1,GHS08
+H310,Mortal en contacto con la piel,Toxicidad aguda cutanea,1,GHS06
+H311,Toxico en contacto con la piel,Toxicidad aguda cutanea,3,GHS06
+H312,Nocivo en contacto con la piel,Toxicidad aguda cutanea,4,GHS07
+H314,Provoca quemaduras graves en la piel y lesiones oculares graves,Corrosion cutanea,1A,GHS05
+H315,Provoca irritacion cutanea,Irritacion cutanea,2,GHS07
+H317,Puede provocar una reaccion alergica en la piel,Sensibilizacion cutanea,1,GHS07
+H318,Provoca lesiones oculares graves,Lesion ocular grave,1,GHS05
+H319,Provoca irritacion ocular grave,Irritacion ocular,2A,GHS07
+H330,Mortal en caso de inhalacion,Toxicidad aguda por inhalacion,1,GHS06
+H331,Toxico en caso de inhalacion,Toxicidad aguda por inhalacion,3,GHS06
+H332,Nocivo en caso de inhalacion,Toxicidad aguda por inhalacion,4,GHS07
+H334,Puede provocar sintomas de alergia o asma o dificultades respiratorias en caso de inhalacion,Sensibilizacion respiratoria,1,GHS08
+H335,Puede irritar las vias respiratorias,Toxicidad especifica en determinados organos (exposicion unica),3,GHS07
+H336,Puede provocar somnolencia o vertigo,Toxicidad especifica en determinados organos (exposicion unica),3,GHS07
+H340,Puede provocar defectos geneticos,Mutagenicidad en celulas germinales,1A,GHS08
+H341,Se sospecha que provoca defectos geneticos,Mutagenicidad en celulas germinales,2,GHS08
+H350,Puede provocar cancer,Carcinogenicidad,1A,GHS08
+H351,Se sospecha que provoca cancer,Carcinogenicidad,2,GHS08
+H360,Puede perjudicar la fertilidad o al feto,Toxicidad para la reproduccion,1A,GHS08
+H361,Se sospecha que perjudica la fertilidad o al feto,Toxicidad para la reproduccion,2,GHS08
+H362,Puede perjudicar a los ninos alimentados con leche materna,Toxicidad para la reproduccion (lactancia),Adicional,
+H370,Provoca danos en los organos,Toxicidad especifica en determinados organos (exposicion unica),1,GHS08
+H371,Puede provocar danos en los organos,Toxicidad especifica en determinados organos (exposicion unica),2,GHS08
+H372,Provoca danos en los organos tras exposiciones prolongadas o repetidas,Toxicidad especifica en determinados organos (exposiciones repetidas),1,GHS08
+H373,Puede provocar danos en los organos tras exposiciones prolongadas o repetidas,Toxicidad especifica en determinados organos (exposiciones repetidas),2,GHS08
+H400,Muy toxico para los organismos acuaticos,Peligro acuatico agudo,1,GHS09
+H410,Muy toxico para los organismos acuaticos con efectos nocivos duraderos,Peligro acuatico cronico,1,GHS09
+H411,Toxico para los organismos acuaticos con efectos nocivos duraderos,Peligro acuatico cronico,2,GHS09
+H412,Nocivo para los organismos acuaticos con efectos nocivos duraderos,Peligro acuatico cronico,3,
+H413,Puede ser nocivo para los organismos acuaticos con efectos nocivos duraderos,Peligro acuatico cronico,4,
+H420,Perjudica la salud publica y el medio ambiente al destruir el ozono en la atmosfera superior,Peligroso para la capa de ozono,1,GHS07

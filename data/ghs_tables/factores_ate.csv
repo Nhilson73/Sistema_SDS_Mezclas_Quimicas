@@ -1,0 +1,7 @@
+via_origen,via_destino,factor_conversion
+oral,oral,1.0
+cutanea,cutanea,1.0
+inhalacion_vapor,inhalacion_vapor,1.0
+inhalacion_polvo,inhalacion_polvo,1.0
+oral,cutanea,2.0
+cutanea,oral,0.5

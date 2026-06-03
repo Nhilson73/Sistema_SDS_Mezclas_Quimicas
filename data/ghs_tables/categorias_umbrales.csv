@@ -1,0 +1,41 @@
+clase_peligro,categoria,umbral_generico,unidad
+Toxicidad aguda oral,1,5,mg/kg
+Toxicidad aguda oral,2,50,mg/kg
+Toxicidad aguda oral,3,300,mg/kg
+Toxicidad aguda oral,4,2000,mg/kg
+Toxicidad aguda oral,5,5000,mg/kg
+Toxicidad aguda cutanea,1,50,mg/kg
+Toxicidad aguda cutanea,2,200,mg/kg
+Toxicidad aguda cutanea,3,1000,mg/kg
+Toxicidad aguda cutanea,4,2000,mg/kg
+Toxicidad aguda por inhalacion,1,0.5,mg/L
+Toxicidad aguda por inhalacion,2,2.0,mg/L
+Toxicidad aguda por inhalacion,3,10,mg/L
+Toxicidad aguda por inhalacion,4,20,mg/L
+Corrosion cutanea,1A,1.0,%
+Corrosion cutanea,1B,5.0,%
+Irritacion cutanea,2,10.0,%
+Lesion ocular grave,1,3.0,%
+Irritacion ocular,2A,10.0,%
+Sensibilizacion cutanea,1,1.0,%
+Sensibilizacion respiratoria,1,1.0,%
+Carcinogenicidad,1A,0.1,%
+Carcinogenicidad,1B,0.1,%
+Carcinogenicidad,2,1.0,%
+Mutagenicidad en celulas germinales,1A,0.1,%
+Mutagenicidad en celulas germinales,1B,0.1,%
+Mutagenicidad en celulas germinales,2,1.0,%
+Toxicidad para la reproduccion,1A,0.3,%
+Toxicidad para la reproduccion,1B,0.3,%
+Toxicidad para la reproduccion,2,3.0,%
+Peligro acuatico agudo,1,25,%
+Peligro acuatico cronico,1,25,%
+Peligro acuatico cronico,2,25,%
+Peligro acuatico cronico,3,25,%
+Peligro acuatico cronico,4,25,%
+Peligroso para la capa de ozono,1,0.1,%
+Toxicidad especifica en determinados organos (exposicion unica),1,10,%
+Toxicidad especifica en determinados organos (exposicion unica),2,10,%
+Toxicidad especifica en determinados organos (exposiciones repetidas),1,10,%
+Toxicidad especifica en determinados organos (exposiciones repetidas),2,10,%
+Peligro por aspiracion,1,10,%

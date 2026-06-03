@@ -1,0 +1,194 @@
+{% extends "base.html" %}
+{% block title %}Nueva mezcla - FSD 2026{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">{{ 'Editar mezcla' if mezcla else 'Nueva mezcla' }}</div>
+    <form method="POST" enctype="multipart/form-data" id="mezclaForm">
+        <div class="form-group">
+            <label for="nombre_producto">Nombre del producto</label>
+            <input type="text" id="nombre_producto" name="nombre_producto" class="form-control" required
+                   value="{{ mezcla.nombre_producto if mezcla else '' }}"
+                   placeholder="Ej: Shampoo Hidratante Premium">
+        </div>
+        <div class="form-group">
+            <label for="lote">Lote (opcional)</label>
+            <input type="text" id="lote" name="lote" class="form-control"
+                   value="{{ mezcla.lote if mezcla else '' }}"
+                   placeholder="Ej: L2026-001">
+        </div>
+
+        <h3 style="margin: 1.5rem 0 0.75rem; color: var(--color-primario);">Componentes</h3>
+        <p style="font-size: 0.85rem; color: #7f8c8d; margin-bottom: 0.75rem;">
+            Agregue hasta 20 componentes. Si marca c.s.p., el porcentaje se calculara automaticamente.
+        </p>
+
+        <div id="componentes-container">
+            {% if componentes_existentes %}
+                {% for c in componentes_existentes %}
+                <div class="componente-row" data-index="{{ loop.index0 }}">
+                    <div class="form-group">
+                        <label>Nombre INCI</label>
+                        <input type="text" name="comp_nombre_{{ loop.index0 }}" class="form-control" required
+                               value="{{ c.nombre_inci }}">
+                    </div>
+                    <div class="form-group">
+                        <label>CAS</label>
+                        <input type="text" name="comp_cas_{{ loop.index0 }}" class="form-control"
+                               value="{{ c.numero_cas or '' }}" placeholder="Ej: 7732-18-5">
+                    </div>
+                    <div class="form-group">
+                        <label>%</label>
+                        <input type="number" name="comp_pct_{{ loop.index0 }}" class="form-control pct-input"
+                               step="0.01" min="0" max="100"
+                               value="{{ c.porcentaje if c.porcentaje and not c.es_csp else '' }}"
+                               {{ 'disabled' if c.es_csp }}>
+                    </div>
+                    <div class="form-group">
+                        <label>c.s.p.</label>
+                        <input type="checkbox" name="comp_csp_{{ loop.index0 }}" class="csp-checkbox"
+                               {{ 'checked' if c.es_csp }}>
+                    </div>
+                    <div class="form-group">
+                        <label>SDS (.md)</label>
+                        <input type="file" name="comp_sds_{{ loop.index0 }}" class="form-control" accept=".md,.txt">
+                        {% if c.sds_subidas %}
+                        <small style="color: var(--color-exito);">Ya tiene SDS subida</small>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+            <div class="componente-row" data-index="0">
+                <div class="form-group">
+                    <label>Nombre INCI</label>
+                    <input type="text" name="comp_nombre_0" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>CAS</label>
+                    <input type="text" name="comp_cas_0" class="form-control" placeholder="Ej: 7732-18-5">
+                </div>
+                <div class="form-group">
+                    <label>%</label>
+                    <input type="number" name="comp_pct_0" class="form-control pct-input"
+                           step="0.01" min="0" max="100">
+                </div>
+                <div class="form-group">
+                    <label>c.s.p.</label>
+                    <input type="checkbox" name="comp_csp_0" class="csp-checkbox">
+                </div>
+                <div class="form-group">
+                    <label>SDS (.md)</label>
+                    <input type="file" name="comp_sds_0" class="form-control" accept=".md,.txt">
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <input type="hidden" id="num_componentes" name="num_componentes"
+               value="{{ componentes_existentes|length if componentes_existentes else 1 }}">
+
+        <div class="btn-group" style="margin: 1rem 0;">
+            <button type="button" id="addComponente" class="btn btn-secondary btn-sm">+ Agregar componente</button>
+            <button type="button" id="removeComponente" class="btn btn-danger btn-sm">- Quitar ultimo</button>
+        </div>
+
+        <div id="pct-warning" class="alert alert-warning" style="display:none;">
+            La suma de porcentajes excede 100%. Verifique los valores.
+        </div>
+
+        <div style="margin-top: 1.5rem;">
+            <button type="submit" class="btn btn-success">
+                {{ 'Actualizar mezcla' if mezcla else 'Guardar mezcla' }}
+            </button>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let compIndex = {{ componentes_existentes|length if componentes_existentes else 1 }};
+const maxComp = 20;
+
+document.getElementById('addComponente').addEventListener('click', function() {
+    if (compIndex >= maxComp) {
+        alert('Maximo 20 componentes.');
+        return;
+    }
+    const container = document.getElementById('componentes-container');
+    const row = document.createElement('div');
+    row.className = 'componente-row';
+    row.dataset.index = compIndex;
+    row.innerHTML = `
+        <div class="form-group">
+            <label>Nombre INCI</label>
+            <input type="text" name="comp_nombre_${compIndex}" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label>CAS</label>
+            <input type="text" name="comp_cas_${compIndex}" class="form-control" placeholder="Ej: 7732-18-5">
+        </div>
+        <div class="form-group">
+            <label>%</label>
+            <input type="number" name="comp_pct_${compIndex}" class="form-control pct-input"
+                   step="0.01" min="0" max="100">
+        </div>
+        <div class="form-group">
+            <label>c.s.p.</label>
+            <input type="checkbox" name="comp_csp_${compIndex}" class="csp-checkbox">
+        </div>
+        <div class="form-group">
+            <label>SDS (.md)</label>
+            <input type="file" name="comp_sds_${compIndex}" class="form-control" accept=".md,.txt">
+        </div>
+    `;
+    container.appendChild(row);
+    compIndex++;
+    document.getElementById('num_componentes').value = compIndex;
+    attachCSPListeners();
+});
+
+document.getElementById('removeComponente').addEventListener('click', function() {
+    const container = document.getElementById('componentes-container');
+    if (container.children.length > 1) {
+        container.removeChild(container.lastElementChild);
+        compIndex--;
+        document.getElementById('num_componentes').value = compIndex;
+    }
+});
+
+function attachCSPListeners() {
+    document.querySelectorAll('.csp-checkbox').forEach(function(cb) {
+        cb.onchange = function() {
+            const row = this.closest('.componente-row');
+            const pctInput = row.querySelector('.pct-input');
+            if (this.checked) {
+                pctInput.value = '';
+                pctInput.disabled = true;
+            } else {
+                pctInput.disabled = false;
+            }
+            validatePct();
+        };
+    });
+    document.querySelectorAll('.pct-input').forEach(function(input) {
+        input.oninput = validatePct;
+    });
+}
+
+function validatePct() {
+    let sum = 0;
+    document.querySelectorAll('.pct-input').forEach(function(input) {
+        if (!input.disabled && input.value) {
+            sum += parseFloat(input.value) || 0;
+        }
+    });
+    const warning = document.getElementById('pct-warning');
+    warning.style.display = sum > 100 ? 'block' : 'none';
+}
+
+attachCSPListeners();
+</script>
+{% endblock %}

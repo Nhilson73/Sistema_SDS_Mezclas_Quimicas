@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Mezclas - FSD 2026{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        Todas las mezclas
+        <a href="{{ url_for('nueva_mezcla') }}" class="btn btn-primary btn-sm" style="float:right;">+ Nueva mezcla</a>
+    </div>
+
+    {% if mezclas %}
+    <div class="table-responsive">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Producto</th>
+                    <th>Lote</th>
+                    <th>Componentes</th>
+                    <th>Estado</th>
+                    <th>Version</th>
+                    <th>Fecha</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for m in mezclas %}
+                <tr>
+                    <td>{{ m.id }}</td>
+                    <td>{{ m.nombre_producto }}</td>
+                    <td>{{ m.lote or 'N/A' }}</td>
+                    <td>{{ m.componentes|length }}</td>
+                    <td><span class="badge badge-{{ m.estado }}">{{ m.estado }}</span></td>
+                    <td>v{{ m.version_actual }}</td>
+                    <td>{{ m.fecha_creacion.strftime('%Y-%m-%d') }}</td>
+                    <td>
+                        <div class="btn-group">
+                            <a href="{{ url_for('ver_mezcla', mezcla_id=m.id) }}" class="btn btn-sm btn-primary">Ver</a>
+                            <a href="{{ url_for('editar_mezcla', mezcla_id=m.id) }}" class="btn btn-sm btn-secondary">Editar</a>
+                            <a href="{{ url_for('generar_fds', mezcla_id=m.id) }}" class="btn btn-sm btn-success">FDS</a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p style="color: #7f8c8d;">No hay mezclas registradas.
+       <a href="{{ url_for('nueva_mezcla') }}">Crear la primera</a>
+    </p>
+    {% endif %}
+</div>
+{% endblock %}
